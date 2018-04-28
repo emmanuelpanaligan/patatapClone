@@ -11,6 +11,8 @@ var audio = ["bubbles","clay","confetti", "corona","dotted-spiral","flash-1","fl
 
 var polygons = [];
 
+var cvas = document.getElementById('myCanvas');
+
 function getRandomColor() {
 	var letters = '0123456789ABCDEF';
 	var color = '#';
@@ -20,22 +22,30 @@ function getRandomColor() {
 	return color;
 }
 
+cvas.addEventListener('click', function() { 
+	draw(Math.floor(Math.random() * 27));
+}, false);
+
 function onKeyDown(event) {
 	var index = event.key.charCodeAt(0) - 97;
 	console.log(index);
 	if(index >= 0 && index <= 25){
-		var edges = Math.floor(Math.random() * 11) + 3; 
-		var maxPoint = new Point(view.size.width, view.size.height);
-		var randomPoint = Point.random();
-		var point = maxPoint * randomPoint;
-		var newPolygon = new Path.RegularPolygon(point, edges, 500);
-		newPolygon.fillColor = getRandomColor();
-		var sound = new Howl({
-			urls: ['audio/' + audio[index] + '.mp3']
-		});
-		sound.play();
-		polygons.push(newPolygon);
+		draw(index);
 	}
+}
+
+function draw(index) {
+	var edges = Math.floor(Math.random() * 11) + 3; 
+	var maxPoint = new Point(view.size.width, view.size.height);
+	var randomPoint = Point.random();
+	var point = maxPoint * randomPoint;
+	var newPolygon = new Path.RegularPolygon(point, edges, 500);
+	newPolygon.fillColor = getRandomColor();
+	var sound = new Howl({
+		urls: ['audio/' + audio[index] + '.mp3']
+	});
+	sound.play();
+	polygons.push(newPolygon);
 }
 
 function onFrame(event){
@@ -44,7 +54,7 @@ function onFrame(event){
 		polygons[i].scale(.9);
 	}
 }
-</script>
+	</script>
 </head>
 <body>
 	<canvas id="myCanvas" resize></canvas>
