@@ -22,23 +22,29 @@ function getRandomColor() {
 	return color;
 }
 
-cvas.addEventListener('click', function() { 
-	draw(Math.floor(Math.random() * 27));
+cvas.addEventListener('click', function(event) { 
+    var x = event.clientX;
+    var y = event.clientY;
+    var sound = Math.floor(Math.random() * 27);
+	draw(sound,x, y);
 }, false);
 
 function onKeyDown(event) {
 	var index = event.key.charCodeAt(0) - 97;
-	console.log(index);
 	if(index >= 0 && index <= 25){
-		draw(index);
+		draw(index,0,0);
 	}
 }
 
-function draw(index) {
+function draw(index,x,y) {
 	var edges = Math.floor(Math.random() * 11) + 3; 
 	var maxPoint = new Point(view.size.width, view.size.height);
 	var randomPoint = Point.random();
 	var point = maxPoint * randomPoint;
+	if(x > 0)
+	{
+		point = new Point(x,y);
+	}
 	var newPolygon = new Path.RegularPolygon(point, edges, 500);
 	newPolygon.fillColor = getRandomColor();
 	var sound = new Howl({
